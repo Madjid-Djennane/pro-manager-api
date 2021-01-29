@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { tasksPriority, tasksStatus } = require('../../../helpers/constants')
+const { tasksPriority, tasksStatus, tasksCategories } = require('../../../helpers/constants')
 
 const taskSchema = mongoose.Schema(
     {
@@ -7,7 +7,7 @@ const taskSchema = mongoose.Schema(
         description: { type: String },
         priority: { type: String, enum: Object.values(tasksPriority) },
         assignedTo: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        category: { type: [String] },
+        category: { type: String, enum: Object.values(tasksCategories) },
         status: { type: String, enum: Object.values(tasksStatus) },
         project: { type: mongoose.Schema.Types.ObjectId, ref: 'Project' }
     }

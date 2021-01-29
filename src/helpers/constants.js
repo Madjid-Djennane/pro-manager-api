@@ -10,13 +10,22 @@ const tasksPriority = {
 }
 const tasksStatus = {
     PENDING: 'pending',
-    IMPLEMENTATION: 'implementation',
+    ASSIGNED: 'assigned',
+    IN_PROGRESS: 'in_progress',
+    REVIEW: 'review',
     COMPLETED: 'completed',
+    WONT_FIX: 'wont_fix'
+}
 
+const tasksCategories = {
+    BUG: 'bug',
+    IMPROVEMENT: 'improvement',
+    FEATURE: 'feature'
 }
 
 module.exports = {
     roles,
     tasksPriority,
-    tasksStatus
+    tasksStatus,
+    tasksCategories
 }

@@ -1,6 +1,7 @@
 const userRepo = require('./repository')
 const { User } = require('./models/user')
 const usersUseCases = require('./use-cases')
+const { authorize } = require('../../plugins/passport')
 
 module.exports = function (router) {
 
@@ -58,7 +59,7 @@ module.exports = function (router) {
     router.get('/:user_id', (req, res, next) => {
         const { user_id: userId } = req.params
         if (!userId) {
-            return res.status(400).json({ error: true, message: errorMessages.MISSING_PARAM, errorData: req.body })
+            return res.status(400).json({ error: true, message: 'MISSING_PARAM', errorData: req.body })
         }
         return userRepo.getUserById(userId)
             .then(user => {
@@ -70,7 +71,7 @@ module.exports = function (router) {
     router.delete('/:user_id', (req, res, next) => {
         const { user_id: userId } = req.params
         if (!userId) {
-            return res.status(400).json({ error: true, message: errorMessages.MISSING_PARAM, errorData: req.body })
+            return res.status(400).json({ error: true, message: 'MISSING_PARAM', errorData: req.body })
         }
         return userRepo.deleteOne({ _id: userId })
             .then(() => {
@@ -91,6 +92,28 @@ module.exports = function (router) {
                     data: updatedUser
                 })
             }).catch(next)
+    })
+
+    // get user Projects
+    router.get('/projects/:user_id', authorize(), (req, res, next) => {
+        const { user_id: userId } = req.params
+        if (!userId) {
+            return res.status(400).json({ error: true, message: 'MISSING_PARAM', errorData: req.body })
+        }
+        return usersUseCases.getUserProjects(userId)
+            .then(result => {
+                console.log('result: ', result)
+                res.status(200).json({ msg: '', data: result })
+            })
+            .catch(err => next(err))
+    })
+
+    // get all users
+    router.get('/users/all', authorize(), (req, res, next) => {
+        return usersUseCases.getUsers()
+            .then(result => {
+                res.status(200).json({ msg: 'users', data: result })
+            }).catch(err => next(err))
     })
 
     return router

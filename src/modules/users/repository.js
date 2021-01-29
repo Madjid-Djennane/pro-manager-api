@@ -54,11 +54,36 @@ const getUserWithPasswordHash = (params) => {
     return User.findOne(params).select('+password')
 }
 
+/**
+ * get user by id then populate and select projects
+ * @param {string} userId 
+ */
+const getUserProjects = userId => {
+    return User.findById(userId).populate({
+        path: 'projects',
+        populate: {
+            path: 'members admin'
+        }
+    }).then(u => u.projects)
+}
+
+/**
+ * update many users
+ * @param {any} filter 
+ * @param {any} set 
+ * @returns
+ */
+const updateMany = (filter, set) => {
+    return User.updateMany(filter, set).then(res => res)
+}
+
 module.exports = {
     getUserById,
     getUsers,
     createUser,
     updateUserById,
     deleteUser,
-    getUserWithPasswordHash
+    getUserWithPasswordHash,
+    getUserProjects,
+    updateMany
 }

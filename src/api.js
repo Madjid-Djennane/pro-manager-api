@@ -8,8 +8,8 @@ module.exports = function() {
     const router = express.Router()
 
     router.use('/users', users(express.Router()))
-    /* router.use('/projects', projects(express.Router()))
-    router.use('/tasks', tasks(express.Router())) */
+    router.use('/projects', projects(express.Router()))
+    router.use('/tasks', tasks(express.Router()))
 
     return router
 }
